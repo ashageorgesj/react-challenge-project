@@ -25,8 +25,6 @@ class ViewOrders extends Component {
 
     }
     handleDelete(key){
-        console.log(key)
-        
         fetch(`${SERVER_IP}/api/delete-order`,{
             method:'POST',
             body: JSON.stringify({
