@@ -19,6 +19,38 @@ class ViewOrders extends Component {
                 }
             });
     }
+    handleEdit(event) {
+        event.preventDefault()
+        console.log(event)
+
+    }
+    handleDelete(key){
+        fetch(`${SERVER_IP}/api/delete-order`,{
+            method:'POST',
+            body: JSON.stringify({
+                'id':key
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.success){
+                console.log('Success deleting order')
+                let orders = this.state.orders.filter((order)=>{
+                    return order._id !== key
+                });
+                this.setState(state =>{
+                    state.orders = orders;
+                    return state
+                })
+            } else{
+                console.log('Error deleting order');
+            }
+        })
+        .catch(error => console.error(error));
+    }
 
     render() {
         return (
@@ -37,8 +69,8 @@ class ViewOrders extends Component {
                                     <p>Quantity: {order.quantity}</p>
                                  </div>
                                  <div className="col-md-4 view-order-right-col">
-                                     <button className="btn btn-success">Edit</button>
-                                     <button className="btn btn-danger">Delete</button>
+                                     <button className="btn btn-success" onClick={(event) => this.handleEdit(event)}>Edit</button>
+                                     <button className="btn btn-danger" onClick={() => {this.handleDelete(order._id)}}>Delete</button>
                                  </div>
                             </div>
                         );
